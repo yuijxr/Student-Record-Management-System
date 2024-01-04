@@ -88,6 +88,22 @@
         </div>
     </div>
 
+    <div class="popup-search">
+        <div class="popup">
+            <div class="search-content">
+                <i class="uil uil-times close-search-btn"></i>
+                <div class="search-info">
+                    <div class="search-title"></div>
+                    <form action="#">
+                        <input id="searchInput" class="search-name" type="text" placeholder="Student No." oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 11);">
+                        <p class="search-message"></p>
+                        <button class="search-btn">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="title-name">Student Record Management System</div>
     <p class="data-structure">Singly Linked List</p>
 
