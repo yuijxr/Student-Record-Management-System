@@ -165,14 +165,14 @@ body {
     font-weight: 600;
 }
 
-.i-title, .peek-title, .pop-title, .isEmpty-title {
+.i-title, .peek-title, .pop-title, .isEmpty-title, .search-title {
     text-align: center;
     font-size: 22px;
     font-weight: 600;
     padding-bottom: 10px;
 }
 
-.i-info, .peek-info, .pop-info, .isEmpty-info {
+.i-info, .peek-info, .pop-info, .isEmpty-info, .search-info {
     font-size: 16px;
 }
 
@@ -184,7 +184,7 @@ body {
     font-weight: 600;
 }
 
-.popup-list, .popup-i, .popup-peek, .popup-pop, .popup-isEmpty {
+.popup-list, .popup-i, .popup-peek, .popup-pop, .popup-isEmpty, .popup-search {
     position: fixed;
     top: 0;
     left: 0;
@@ -194,19 +194,19 @@ body {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-.popup-list, .popup, .popup-i, .popup-peek, .popup-pop, .popup-isEmpty {
+.popup-list, .popup, .popup-i, .popup-peek, .popup-pop, .popup-isEmpty, .popup-search {
     opacity: 0;
     display: none;
     pointer-events: none;
 } 
 
-.popup-list.show, .popup-list.show .popup, .popup-i.show, .popup-i.show .popup, .popup-peek.show, .popup-peek.show .popup, .popup-pop.show, .popup-pop.show .popup, .popup-isEmpty.show, .popup-isEmpty.show .popup {
+.popup-list.show, .popup-list.show .popup, .popup-i.show, .popup-i.show .popup, .popup-peek.show, .popup-peek.show .popup, .popup-pop.show, .popup-pop.show .popup, .popup-isEmpty.show, .popup-isEmpty.show .popup, .popup-search.show, .popup-search.show .popup {
     opacity: 1;
     display: block;
     pointer-events: auto;
 }
 
-.popup-list .popup, .popup-i .popup, .popup-peek .popup, .popup-pop .popup, .popup-isEmpty .popup {
+.popup-list .popup, .popup-i .popup, .popup-peek .popup, .popup-pop .popup, .popup-isEmpty .popup, .popup-search .popup {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -239,14 +239,28 @@ body {
     border: 2px solid black;
 }
 
-.peek-message, .pop-message, .isEmpty-message {
+.search-info {
+    background-color: white;
+    min-height: 170px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+.peek-message, .pop-message, .isEmpty-message, .search-message {
     font-weight: 500;
     text-align: center;
     font-size: 18px;
-    padding-top: 15px;
+    padding-top: 18px;
+    padding-bottom: 8px;
 }
 
-.close_btn, .close-i-btn, .close-peek-btn, .close-pop-btn, .close-isEmpty-btn {
+.search-message {
+    float: left;
+    padding-left: 10px;
+}
+
+.close_btn, .close-i-btn, .close-peek-btn, .close-pop-btn, .close-isEmpty-btn, .close-search-btn {
     position: absolute;
     right: 10px;
     top: 0px;
@@ -265,7 +279,7 @@ body {
     gap: 15px;
 }
 
-.content form :where(input){
+.content form :where(input), .search-content :where(input){
     font-size: 15px;
     width: 100%;
     height: 40px;
@@ -280,7 +294,7 @@ input {
     padding-bottom: 10px;
 }
 
-.done-btn {
+.done-btn, .search-btn {
     width: 30%;
     float: right;
     font-size: 15px;
@@ -291,4 +305,8 @@ input {
     border-radius: 10px;
     padding: 10px;
     cursor: pointer;
+}
+
+.search-btn {
+    margin-top: 12px;
 }
