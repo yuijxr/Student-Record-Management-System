@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Student Record Management System</title>
+</head>
+<body>
+    <div class="popup-list">
+        <div class="popup">
+            <div class="content">
+                <i class="uil uil-times close_btn"></i>
+                <div class="list-title"></div>
+                <form action="#">
+                    <div class="list-infos">
+                        <input class="list-name" type="text" placeholder="Name (Surname, First name Middle Name)" oninput="this.value = this.value.replace(/[^a-zA-Z\s,.'-]/g, '');">
+                        <input class="list-no" type="text" placeholder="Student No." oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 11);">
+                        <input class="list-block" type="text" placeholder="Block/Section (ex. 2.2BSIT)">
+                        <input class="list-gwa" type="text" placeholder="GWA (ex. 99.99)" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.match(/^\d{0,3}(\.\d{0,2})?/) ? this.value.match(/^\d{0,3}(\.\d{0,2})?/)[0] : '';">
+                    </div>
+                    <button class="done-btn">Done</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-i">
+        <div class="popup">
+            <div class="i-content">
+                <i class="uil uil-times close-i-btn"></i>
+                <div class="i-info">
+                    <div class="i-title">Guides</div>
+                    <p><span>PushBack</span>: Add new student record at the end/bottom of the list.</p>
+                    <p><span>PushFront</span>: Add new student record at the beginning/top of the list.</p>
+                    <p><span>PopBack</span>: Delete student record at the end/bottom of the list.</p>
+                    <p><span>PopFront</span>: Delete student record at the beginning/top of the list.</p>
+                    <p><span>Peek</span>: Shows the first/topmost(head) record of the list, it does not remove the record.</p>
+                    <p><span>isEmpty</span>: Checks if the list is empty, it will return a boolean value(true or false) depending on the result.</p>
+                    <p><span>Search</span>: Search a student record in the list, It will return the index of the record.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-peek">
+        <div class="popup">
+            <div class="peek-content">
+                <i class="uil uil-times close-peek-btn"></i>
+                <div class="peek-info">
+                    <div class="peek-title">Peek</div>
+                    <p class="peek-message"></p>
+                    <p class="peek-index"></p>
+                    <p class="peek-name"></p>
+                    <p class="peek-num"></p>
+                    <p class="peek-block"></p>
+                    <p class="peek-gwa"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-pop">
+        <div class="popup">
+            <div class="pop-content">
+                <i class="uil uil-times close-pop-btn"></i>
+                <div class="pop-info">
+                    <div class="pop-title"></div>
+                    <p class="pop-message"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-isEmpty">
+        <div class="popup">
+            <div class="isEmpty-content">
+                <i class="uil uil-times close-isEmpty-btn"></i>
+                <div class="isEmpty-info">
+                    <div class="isEmpty-title"></div>
+                    <p class="isEmpty-message"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="title-name">Student Record Management System</div>
+    <p class="data-structure">Singly Linked List</p>
+
+    <div class="operations-wrapper">
+        <div class="operations-container">
+            <div class="circle-i">i</div>
+            <li class="pushBack operation">PushBack</li>
+            <li class="pushFront operation">PushFront</li>
+            <li class="popBack operation">PopBack</li>
+            <li class="popFront operation">PopFront</li>
+            <li class="peek operation">Peek</li>
+            <li class="isEmpty operation">isEmpty</li>
+            <li class="search operation">Search</li>
+        </div>
+    </div>
+
+    <div class="list-wrapper">
+        <div class="list-container">
+            <div class="infos">
+                <div class="index">Index</div>
+                <div class="name">Name</div>
+                <div class="num">Student Num.</div>
+                <div class="block">Block/Section</div>
+                <div class="gwa">GWA</div>
+            </div>
+
+            <div class="studentlist-container">
+                
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
