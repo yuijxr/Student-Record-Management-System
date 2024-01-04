@@ -13,6 +13,7 @@ const popupInstruction = document.querySelector('.popup-i')
 const popupPeek = document.querySelector('.popup-peek');
 const popupPop = document.querySelector('.popup-pop');
 const popupIsEmpty = document.querySelector('.popup-isEmpty');
+const popupSearch = document.querySelector('.popup-search');
 
 //////// CLOSE BUTTONS VAR //////////
 const closeBtn = document.querySelector('.close_btn');
@@ -20,6 +21,7 @@ const closeIBtn = document.querySelector('.close-i-btn');
 const closePeekBtn = document.querySelector('.close-peek-btn');
 const closePopBtn = document.querySelector('.close-pop-btn');
 const closeIsEmptyBtn = document.querySelector('.close-isEmpty-btn');
+const closeSearchBtn = document.querySelector('.close-search-btn')
 
 //////// LIST VAR //////////
 const listTitle = document.querySelector('.list-title');
@@ -28,6 +30,7 @@ const listContainer = document.querySelector('.studentlist-container');
 
 //////// OTHER BUTTONS //////////
 const doneBtn = document.querySelector('.done-btn');
+const searchBtn = document.querySelector('.search-btn');
 const instruction = document.querySelector('.circle-i');
 
 //////// PEEK INFOS //////////
@@ -41,6 +44,7 @@ const peekGwa = document.querySelector('.peek-gwa');
 const peekMessage = document.querySelector('.peek-message');
 const popMessage = document.querySelector('.pop-message');
 const isEmptyMessage = document.querySelector('.isEmpty-message');
+const searchMessage = document.querySelector('.search-message');
 
 let currentIndex = 1;
 let currentOperation;
@@ -103,6 +107,47 @@ function peekList() {
     }
 }
 
+function searchList() {
+    changeTitle('Search');
+    popupSearch.classList.add('show');
+
+    const searchInput = document.getElementById('searchInput');
+
+    searchBtn.addEventListener('click', () => {
+        const studentNumToSearch = searchInput.value;
+
+        if (studentNumToSearch === '') {
+            updateMessage(searchMessage, 'Please enter the student number.');
+            return;
+        }
+
+        const index = searchStudentList(studentNumToSearch);
+
+        if (index !== -1) {
+            updateMessage(searchMessage, `Student found at index ${index + 1}.`);
+        } else {
+            updateMessage(searchMessage, 'Student not found in the list.');
+        }
+    });
+    
+    closeSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        updateMessage(searchMessage, '');
+    });
+}
+
+function searchStudentList(studentNum) {
+    const studentElements = document.querySelectorAll('.student-num');
+    
+    for (let i = 0; i < studentElements.length; i++) {
+        if (studentElements[i].textContent === studentNum) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 function isEmptyList() {
     if(listContainer.childElementCount === 0) {
         changeTitle('isEmpty');
@@ -139,7 +184,7 @@ function updateMessage(element, message) {
 }
 
 function changeTitle(title) {
-    const titleElements = document.querySelectorAll('.peek-title, .pop-title, .isEmpty-title');
+    const titleElements = document.querySelectorAll('.peek-title, .pop-title, .isEmpty-title, .search-title');
     titleElements.forEach((element) => {
         element.textContent = title;
     });
@@ -248,6 +293,12 @@ isEmpty.addEventListener('click', () => {
     isEmptyList();
 })
 
+search.addEventListener('click', () => {
+    const searchName = document.querySelector('.search-name');
+    searchList();
+    searchName.focus();
+})
+
 instruction.addEventListener('click', () => {
     popupInstruction.classList.add('show');
 })
@@ -281,4 +332,8 @@ closePopBtn.addEventListener('click', () => {
 
 closeIsEmptyBtn.addEventListener('click', () => {
     popupIsEmpty.classList.remove('show');
+})
+
+closeSearchBtn.addEventListener('click', () => {
+    popupSearch.classList.remove('show');
 })
