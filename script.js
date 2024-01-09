@@ -49,59 +49,139 @@ const searchMessage = document.querySelector('.search-message');
 let currentIndex = 1;
 let currentOperation;
 
+class Node {
+    constructor(studentData) {
+        this.studentData = studentData;
+        this.next = null;
+    }
+}
+
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    append(studentData) {
+        const newNode = new Node(studentData);
+        if (!this.head) {
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            this.tail.next = newNode;
+            this.tail = newNode;
+        }
+        this.size++;
+    }
+
+    prepend(studentData) {
+        const newNode = new Node(studentData);
+        if (!this.head) {
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            newNode.next = this.head;
+            this.head = newNode;
+        }
+        this.size++;
+    }
+
+    removeFirst() {
+        if (!this.head) {
+            return null;
+        }
+        const removedNode = this.head;
+        this.head = this.head.next;
+        this.size--;
+        return removedNode.studentData;
+    }
+
+    removeLast() {
+        if (!this.head) {
+            return null;
+        }
+
+        let current = this.head;
+        let previous = null;
+
+        while (current.next) {
+            previous = current;
+            current = current.next;
+        }
+
+        if (previous) {
+            previous.next = null;
+            this.tail = previous;
+        } else {
+            this.head = null;
+            this.tail = null;
+        }
+
+        this.size--;
+        return current.studentData;
+    }
+
+    getFirst() {
+        return this.head ? this.head.studentData : null;
+    }
+
+    isEmpty() {
+        return this.size === 0;
+    }
+}
+
+const linkedList = new LinkedList();
+
 function pushBackList(studentData) {
-    const newList = createListElement(studentData);
-    listContainer.appendChild(newList);
-    updateIndex()
+    linkedList.append(studentData);
+    updateIndex();
+    renderList();
 }
 
 function pushFrontList(studentData) {
-    const newList = createListElement(studentData);
-    listContainer.insertBefore(newList, listContainer.firstChild);
-    updateIndex()
+    linkedList.prepend(studentData);
+    updateIndex();
+    renderList();
 }
 
 function popFrontList() {
-    const firstList = listContainer.firstElementChild;
-
-    if (firstList) {
-        listContainer.removeChild(firstList);
-        updateIndex();
-    } else {
-        updateMessage(popMessage, 'The list is empty. Nothing to pop.')
-        changeTitle('popFront')
+    const removedStudentData = linkedList.removeFirst();
+    if (removedStudentData === null) {
+        updateMessage(popMessage, 'The list is empty. Nothing to pop.');
+        changeTitle('popFront');
         popupPop.classList.add('show');
+    } else {
+        updateIndex();
+        renderList();
     }
 }
 
 function popBackList() {
-    const lastList = listContainer.lastElementChild;
-
-    if (lastList) {
-        listContainer.removeChild(lastList);
-        updateIndex();
-    } else {
-        updateMessage(popMessage, 'The list is empty. Nothing to pop.')
-        changeTitle('popBack')
+    const removedStudentData = linkedList.removeLast();
+    if (removedStudentData === null) {
+        updateMessage(popMessage, 'The list is empty. Nothing to pop.');
+        changeTitle('popBack');
         popupPop.classList.add('show');
+    } else {
+        updateIndex();
+        renderList();
     }
 }
 
 function peekList() {
-    const firstRecord = listContainer.firstElementChild;
-
-    if(listContainer.childElementCount === 0) {
-        updateMessage(peekMessage, 'The list is empty. Nothing to peek.')
+    const studentData = linkedList.getFirst();
+    if (studentData === null) {
+        updateMessage(peekMessage, 'The list is empty. Nothing to peek.');
         changeTitle('Peek');
         peekIndex.innerHTML = ``;
         peekName.innerHTML = ``;
         peekNum.innerHTML = ``;
         peekBlock.innerHTML = ``;
         peekGwa.innerHTML = ``;
-        peekMessage.style.display = 'block'; 
+        peekMessage.style.display = 'block';
         popupPeek.classList.add('show');
     } else {
-        const studentData = extractStudentData(firstRecord);
         displayPeekInfo(studentData);
         popupPeek.classList.add('show');
     }
@@ -129,7 +209,7 @@ function searchList() {
             updateMessage(searchMessage, 'Student not found in the list.');
         }
     });
-    
+
     closeSearchBtn.addEventListener('click', () => {
         searchInput.value = '';
         updateMessage(searchMessage, '');
@@ -137,19 +217,20 @@ function searchList() {
 }
 
 function searchStudentList(studentNum) {
-    const studentElements = document.querySelectorAll('.student-num');
-    
-    for (let i = 0; i < studentElements.length; i++) {
-        if (studentElements[i].textContent === studentNum) {
-            return i;
+    let current = linkedList.head;
+    let index = 0;
+    while (current) {
+        if (current.studentData.studentNum === studentNum) {
+            return index;
         }
+        current = current.next;
+        index++;
     }
-
     return -1;
 }
 
 function isEmptyList() {
-    if(listContainer.childElementCount === 0) {
+    if (linkedList.isEmpty()) {
         changeTitle('isEmpty');
         updateMessage(isEmptyMessage, 'The list is empty / True.')
         popupIsEmpty.classList.add('show');
@@ -162,21 +243,30 @@ function isEmptyList() {
 
 function extractStudentData(listElement) {
     return {
-        index: listElement.querySelector('.student-index').textContent,
-        name: listElement.querySelector('.student-name').textContent,
-        studentNum: listElement.querySelector('.student-num').textContent,
-        block: listElement.querySelector('.student-block').textContent,
-        gwa: listElement.querySelector('.student-gwa').textContent
+        index: listElement.studentData.index,
+        name: listElement.studentData.name,
+        studentNum: listElement.studentData.studentNum,
+        block: listElement.studentData.block,
+        gwa: listElement.studentData.gwa
     };
 }
 
 function displayPeekInfo(studentData) {
-    peekIndex.innerHTML = `<span>Index: </span>${studentData.index}`;
-    peekName.innerHTML = `<span>Name: </span>${studentData.name}`;
-    peekNum.innerHTML = `<span>Student No.: </span>${studentData.studentNum}`;
-    peekBlock.innerHTML = `<span>Block: </span>${studentData.block}`;
-    peekGwa.innerHTML = `<span>GWA: </span>${studentData.gwa}`;
-    peekMessage.style.display = 'none'; 
+    if (studentData === null) {
+        peekIndex.innerHTML = `<span>Index: </span>`;
+        peekName.innerHTML = `<span>Name: </span>`;
+        peekNum.innerHTML = `<span>Student No.: </span>`;
+        peekBlock.innerHTML = `<span>Block: </span>`;
+        peekGwa.innerHTML = `<span>GWA: </span>`;
+        peekMessage.style.display = 'block';
+    } else {
+        peekIndex.innerHTML = `<span>Index: </span>${studentData.index}`;
+        peekName.innerHTML = `<span>Name: </span>${studentData.name}`;
+        peekNum.innerHTML = `<span>Student No.: </span>${studentData.studentNum}`;
+        peekBlock.innerHTML = `<span>Block: </span>${studentData.block}`;
+        peekGwa.innerHTML = `<span>GWA: </span>${studentData.gwa}`;
+        peekMessage.style.display = 'none';
+    }
 }
 
 function updateMessage(element, message) {
@@ -191,34 +281,47 @@ function changeTitle(title) {
 }
 
 function updateIndex() {
-    const existingLists = document.querySelectorAll('.student-index');
-    
-    existingLists.forEach((indexElement, index) => {
-        indexElement.textContent = (index + 1).toString();
-    });
-
-    currentIndex = existingLists.length + 1;
+    let current = linkedList.head;
+    let index = 1;
+    while (current) {
+        current.studentData.index = index;
+        current = current.next;
+        index++;
+    }
+    currentIndex = index;
 }
 
 function createListElement(studentData) {
-    const newList = document.createElement('div');
-    newList.classList.add('lists');
+  const newList = document.createElement('div');
+  newList.classList.add('lists');
 
-    newList.innerHTML = `<li class="student-index">${studentData.index}</li>
-                        <li class="student-name">${studentData.name}</li>
-                        <li class="student-num">${studentData.studentNum}</li>
-                        <li class="student-block">${studentData.block}</li>
-                        <li class="student-gwa">${studentData.gwa}</li>`;
+  newList.innerHTML = `<li class="student-index">${studentData.index}</li>
+                      <li class="student-name">${studentData.name}</li>
+                      <li class="student-num">${studentData.studentNum}</li>
+                      <li class="student-block">${studentData.block}</li>
+                      <li class="student-gwa">${studentData.gwa}</li>`;
 
-    return newList;
+  return newList;
+}
+
+function renderList() {
+    listContainer.innerHTML = '';
+  
+    let current = linkedList.head;
+    while (current) {
+      const studentData = current.studentData;
+      const newList = createListElement(studentData);
+      listContainer.appendChild(newList);
+      current = current.next;
+    }
 }
 
 //////// FOR PUSHBACK AND PUSHFRONT //////////
 doneBtn.addEventListener('click', () => {
     const studentData = getStudentData();
 
-    if(!studentData.name || !studentData.studentNum || !studentData.block || !studentData.gwa) {
-        alert('Please fill in all fields before submitting.') // needs to be changed
+    if (!studentData.name || !studentData.studentNum || !studentData.block || !studentData.gwa) {
+        alert('Please fill in all fields before submitting.');
         return;
     }
 
@@ -226,7 +329,7 @@ doneBtn.addEventListener('click', () => {
         studentData.index = currentIndex;
         pushBackList(studentData);
     } else if (currentOperation === 'pushFront') {
-        studentData.index = 1; 
+        studentData.index = 1;
         pushFrontList(studentData);
     }
 
@@ -271,14 +374,14 @@ pushBack.addEventListener('click', () => {
     updateOperationAndTitle('pushBack');
     listName.focus();
 });
-  
+
 pushFront.addEventListener('click', () => {
     updateOperationAndTitle('pushFront');
     listName.focus();
 });
 
 popFront.addEventListener('click', () => {
-    popFrontList();
+     popFrontList();
 });
 
 popBack.addEventListener('click', () => {
@@ -287,21 +390,21 @@ popBack.addEventListener('click', () => {
 
 peek.addEventListener('click', () => {
     peekList()
-})
+});
 
 isEmpty.addEventListener('click', () => {
     isEmptyList();
-})
+});
 
 search.addEventListener('click', () => {
     const searchName = document.querySelector('.search-name');
     searchList();
     searchName.focus();
-})
+});
 
 instruction.addEventListener('click', () => {
     popupInstruction.classList.add('show');
-})
+});
 
 //////// CLOSE BUTTONS //////////
 closeBtn.addEventListener('click', () => {
@@ -314,26 +417,26 @@ closeBtn.addEventListener('click', () => {
     studentNumInput.value = '';
     blockInput.value = '';
     gwaInput.value = '';
-    
+
     popupList.classList.remove('show');
 });
 
 closeIBtn.addEventListener('click', () => {
     popupInstruction.classList.remove('show');
-})
+});
 
 closePeekBtn.addEventListener('click', () => {
     popupPeek.classList.remove('show');
-})
+});
 
 closePopBtn.addEventListener('click', () => {
     popupPop.classList.remove('show');
-})
+});
 
 closeIsEmptyBtn.addEventListener('click', () => {
     popupIsEmpty.classList.remove('show');
-})
+});
 
 closeSearchBtn.addEventListener('click', () => {
     popupSearch.classList.remove('show');
-})
+});
