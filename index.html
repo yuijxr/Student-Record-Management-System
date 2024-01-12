@@ -18,7 +18,7 @@
                 <div class="list-title"></div>
                 <form action="#">
                     <div class="list-infos">
-                        <input class="list-name" type="text" placeholder="Name (Surname, First name Middle Name)" oninput="this.value = this.value.replace(/[^a-zA-Z\s,.'-]/g, '').substring(0, 30);" maxLength="30">
+                        <input class="list-name" type="text" placeholder="Name (Surname, First name Middle Name)" oninput="this.value = this.value.replace(/[^a-zA-Z\s,.'-]/g, '').substring(0, 40);" maxLength="40">
                         <input class="list-no" type="text" placeholder="Student No." oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 11);">
                         <input class="list-block" type="text" placeholder="Block/Section (ex. 2.2BSIT)">
                         <input class="list-gwa" type="text" placeholder="GWA (ex. 99.99)" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.match(/^\d{0,3}(\.\d{0,2})?/) ? this.value.match(/^\d{0,3}(\.\d{0,2})?/)[0] : '';">
